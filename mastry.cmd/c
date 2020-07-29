@@ -1,0 +1,18 @@
+[
+    {
+        "description": "Hello this is my first problem.",
+        "solutions": [
+            { "description": "This is my first solution." },
+            { "description": "This is my second solution." },
+            { "description": "This is my third solution and this one is correct.", "isCorrect": true }
+        ]
+    },
+    {
+        "description": "Hello this is my second problem.",
+        "solutions": [
+            { "description": "This is my first solution." },
+            { "description": "This is my second solution." },
+            { "description": "This is my third solution and this one is correct.", "isCorrect": true }
+        ]
+    }
+]
