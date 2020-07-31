@@ -7,9 +7,11 @@ import (
 	"os"
 
 	"github.com/martindrlik/mastry.app/catalog"
+	"github.com/martindrlik/mastry.app/server"
 )
 
 var (
+	addr   = flag.String("addr", ":8042", "listen and serve on TCP network address addr")
 	source = flag.String("source", "c", "catalog's source file")
 	seed   = flag.Int64("seed", 17, "value used to initialize the source to a deterministic state")
 )
@@ -21,15 +23,19 @@ func main() {
 		catalog.SourceFile(*source),
 		catalog.Intn(rand.Intn))
 	if err != nil {
-		fmt.Printf("mastry.cmd load error: %v", err)
+		fatal("load error: %v", err)
 		os.Exit(1)
 	}
-	printProblem(c.Problem())
+	if err := server.ListenAndServe(
+		server.Addr(*addr),
+		server.WithCatalog(c)); err != nil {
+		fatal("listen and serve on %v error: %v", *addr, err)
+	}
 }
 
-func printProblem(p catalog.Problem) {
-	fmt.Println(p.Description)
-	for i, solution := range p.Solutions {
-		fmt.Printf("%d: %s\n", i, solution.Description)
-	}
+func fatal(format string, a ...interface{}) {
+	fmt.Printf("mastry.cmd ")
+	fmt.Printf(format, a...)
+	fmt.Println()
+	os.Exit(1)
 }
